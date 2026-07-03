@@ -20,6 +20,7 @@ Il est important que le fichier spec + tasks soit :
 - lisible aisément par un humain
 - linké avec le fichier contexte
 - donne des instructions pour la planification (ne pas être trop verbeux, mettre des exemples de code, ...)
+- indique qu'il faut mettre à jour le status de la tache dans le fichier
 
 Il est important que pour la création des tâches (qui sont techniques), le SKILL fasse appel aux SKILLs de `ipt-doc:*` qui contiennent
 des informations techniques sur le codebase ainsi que les bonnes pratiques.

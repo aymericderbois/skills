@@ -37,3 +37,4 @@ Le fichier `SKILL.md` contient un frontmatter YAML avec `name` (identique au nom
 | Skill | Description |
 |-------|-------------|
 | `git-commit` | Analyser les changements et créer des commits atomiques |
+| `explain-your-changes` | Expliquer, fichier par fichier, les changements de la session |

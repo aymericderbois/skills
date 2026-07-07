@@ -1,109 +1,74 @@
 ---
 name: git-commit
 description: > 
-  Use when the user asks to commit pending changes, wants atomic/per-feature commits, or invokes /git-commit. Splits the working tree into one commit per logical
-  feature, scope, or concern instead of a single bulk commit.
+  À utiliser quand l'utilisateur demande de committer les changements en attente, veut des commits atomiques/par fonctionnalité, ou invoque /git-commit. Découpe
+  l'arbre de travail en un commit par fonctionnalité, périmètre ou préoccupation logique, plutôt qu'un seul commit fourre-tout.
 disable-model-invocation: true
-argument-hint: "[intentions, constraints, or files to include/exclude]"
+argument-hint: "[intentions, contraintes, ou fichiers à inclure/exclure]"
 allowed-tools: Bash(git status *) Bash(git diff *) Bash(git log *) Bash(git add *) Bash(git commit *)
 model-invocation: false
 ---
 
 # git-commit
 
-## Overview
+## Vue d'ensemble
 
-Group the current working tree changes into **multiple atomic commits**, one per logical feature/fix/concern.
+Regroupe les changements de l'arbre de travail courant en **plusieurs commits atomiques**, un par fonctionnalité/correctif/préoccupation logique.
 
-Core principle: **one commit = one intent**. If a diff touches two unrelated concerns, it becomes two commits.
+Principe fondamental : **un commit = une intention**. Si un diff touche deux préoccupations sans rapport, il devient deux commits.
 
-## Commit Message Format
+## Format des messages de commit
 
-Two formats depending on whether a ticket is found:
+Format unique : **Conventional Commits**.
 
-### With ticket (iPaidThat workflow)
+Format : `<type>(<scope>)?: <sujet>`
 
-Format: `[IPT2-XXXX] Description in French`
+**Types autorisés** (utiliser le premier qui convient) :
 
-- Description in French only
-- Present tense, imperative mood: `Ajoute`, `Corrige`, `Supprime`, `Refactorise...` (not `Ajouté`/`Ajout`)
-- Describe WHAT, not HOW
-- First line ≤ 72 characters
-- No trailing period
+| Type       | À utiliser pour                                            |
+|------------|-----------------------------------------------------------|
+| `feat`     | Nouvelle fonctionnalité visible par l'utilisateur         |
+| `fix`      | Correction de bug                                         |
+| `refactor` | Changement de code sans correction de bug ni fonctionnalité |
+| `perf`     | Amélioration de performance                               |
+| `test`     | Ajout ou correction de tests                             |
+| `docs`     | Documentation uniquement                                  |
+| `style`    | Formatage, espaces, aucun changement de code             |
+| `build`    | Système de build, dépendances (uv, npm, docker, nix…)    |
+| `ci`       | Configuration CI                                          |
+| `chore`    | Maintenance, aucun changement de code de production       |
+| `revert`   | Annule un commit précédent                               |
 
-### Without ticket (Conventional Commits)
+- Sujet en minuscules, mode impératif, sans point final, ≤ 72 caractères
+- Le scope est optionnel mais recommandé : nom d'app/module (ex. `feat(auth): …`)
+- Rédiger le sujet en français
 
-Format: `<type>(<scope>)?: <subject>`
+## Déroulé
+Voir [workflow.md](workflow.md) pour le schéma visuel.
 
-**Allowed types** (use the first that fits):
+### Étape par étape
 
-| Type       | Use for                                                 |
-|------------|---------------------------------------------------------|
-| `feat`     | New user-facing feature                                 |
-| `fix`      | Bug fix                                                 |
-| `refactor` | Code change that neither fixes a bug nor adds a feature |
-| `perf`     | Performance improvement                                 |
-| `test`     | Adding or fixing tests                                  |
-| `docs`     | Documentation only                                      |
-| `style`    | Formatting, whitespace, no code change                  |
-| `build`    | Build system, dependencies (uv, npm, docker, nix…)      |
-| `ci`       | CI configuration                                        |
-| `chore`    | Maintenance, no production code change                  |
-| `revert`   | Reverts a previous commit                               |
+1. **Inspecter** — exécuter en parallèle :
+  - `git status` (sans `-uall`)
+  - `git diff` (non indexé)
+  - `git diff --cached` (indexé)
+  - `git log --oneline -20` (référence de style + langue)
 
-- Subject in lowercase, imperative mood, no trailing period, ≤ 72 chars
-- Scope is optional but recommended: app/module name (e.g. `feat(auth): …`)
-- Write subject in French
+2. **Regrouper** — clusteriser mentalement les changements en fonctionnalités. Heuristiques :
+  - Même app/module/scope → probablement même commit
+  - Même intention (correctif vs nouvelle fonctionnalité vs refactor) → même commit
+  - Plusieurs changements dans le **même fichier** avec la même intention (ex. suppression d'une fonctionnalité + nettoyage des espaces autour) → un commit, pas deux. Ne pas fragmenter pour le plaisir.
+  - Fichiers de config/build servant une fonctionnalité → regroupés avec cette fonctionnalité
+  - Correctifs annexes sans rapport → commit séparé
+  - Fichiers générés (migrations, lockfiles) → avec le changement qui les a produits
+  - Fichiers ressemblant à des secrets ou purement locaux → exclus et signalés à l'utilisateur
+  - **Cadrage par argument** : si l'utilisateur a passé un argument au skill (ex. `/git-commit les settings (log suppr)`), le traiter comme un filtre strict — ne planifier que les commits correspondant à ce périmètre, laisser toute autre modification dans l'arbre de travail sans l'indexer ni s'y attarder.
 
-### Ticket Extraction
+3. **Planifier & valider** — avant tout `git add`, présenter à l'utilisateur les commits planifiés complets **dans le format exact ci-dessous**, puis **S'ARRÊTER et attendre une validation explicite**. Ne pas passer à l'indexation/au commit tant que l'utilisateur n'a pas confirmé par une approbation explicite telle que « OK », « oui » ou « go » (même en mode auto — cette validation est obligatoire car les commits sont difficiles à annuler proprement). Si l'utilisateur demande un changement, régénérer et réafficher le plan **complet**, puis redemander validation.
 
-Parse the branch name for the pattern `IPT2-\d+`:
+   **Format de sortie** — un bloc par commit, séparés par une ligne contenant uniquement `-------` :
 
-- **If ticket found**: use `[IPT2-XXXX] Description` format
-- **If no ticket found**: use Conventional Commits format
-
-## Workflow
-See [workflow.md](workflow.md) for the visual flow.
-
-### Step by step
-
-1. **Inspect** — run in parallel:
-  - `git status` (no `-uall`)
-  - `git diff` (unstaged)
-  - `git diff --cached` (staged)
-  - `git log --oneline -20` (style + language reference)
-
-2. **Group** — mentally cluster changes into features. Heuristics:
-  - Same app/module/scope → likely same commit
-  - Same intent (bugfix vs new feature vs refactor) → same commit
-  - Multiple changes to the **same file** with the same intent (e.g. removing a feature + tidying the surrounding whitespace) → one commit, not two. Don't fragment for the sake of it.
-  - Config/build files supporting a feature → bundled with that feature
-  - Unrelated drive-by fixes → separate commit
-  - Generated files (migrations, lockfiles) → with the change that produced them
-  - Secret-looking or local-only files → excluded and flagged to the user
-  - **Argument scoping**: if the user passed an argument to the skill (e.g. `/git-commit les settings (log suppr)`), treat it as a hard filter — plan only the commits matching that scope, leave every other modification in the working tree without staging or commenting on it at length.
-
-3. **Plan & validate** — before any `git add`, output the full planned commits to the user **in the exact format below**, then **STOP and wait for explicit user validation**. Do not proceed to staging/committing until the user confirms with an explicit approval such as "OK", "oui", or "go" (even in auto mode — this validation is mandatory because commits are hard to reverse cleanly). If the user requests any change, regenerate and reprint the **full** plan, then ask for validation again.
-
-   **Output format** — one block per commit, separated by a line containing only `-------`:
-
-   With ticket:
-   ```
-   [IPT2-4521] Ajoute le modèle d'export de factures
-
-   - path/to/file1
-   - path/to/file2
-
-   -------
-
-   [IPT2-4521] Corrige le calcul du montant de paiement
-
-   - path/to/file3
-   - path/to/file4
-   ```
-
-   Without ticket (Conventional Commits):
-   ```
+   <output-format>
    feat(export): ajoute le modèle d'export de factures
 
    - path/to/file1
@@ -115,17 +80,17 @@ See [workflow.md](workflow.md) for the visual flow.
 
    - path/to/file3
    - path/to/file4
-   ```
+   </output-format>
 
-   **Rules for the body:**
-   - **Default: no body.** The subject + file list is usually enough.
-   - Add a body **only when** it conveys non-obvious WHY: a hidden constraint, a workaround, a trade-off, a link to an incident/ticket.
-   - Never restate WHAT the diff does — the file list and subject already say that.
-   - Never write a body just to "look thorough."
+   **Règles pour le corps :**
+   - **Par défaut : pas de corps.** Le sujet + la liste de fichiers suffisent généralement.
+   - Ajouter un corps **uniquement quand** il transmet un POURQUOI non évident : une contrainte cachée, un contournement, un compromis, un lien vers un incident/ticket.
+   - Ne jamais reformuler CE QUE fait le diff — la liste de fichiers et le sujet le disent déjà.
+   - Ne jamais écrire un corps juste pour « faire sérieux ».
 
-   After printing the plan, ask: *"OK pour committer dans cet ordre ?"* and wait.
+   Après avoir affiché le plan, demander : *« OK pour committer dans cet ordre ? »* et attendre.
 
-   **Ambiguous untracked files** — if the working tree contains untracked files/directories whose intent is unclear (personal tooling, editor config, local data, generated artifacts…), surface them in a dedicated `Questions avant de committer` block **before** the commit plan, listing each path with a short hypothesis and a direct question. Example:
+   **Fichiers non-suivis ambigus** — si l'arbre de travail contient des fichiers/dossiers non-suivis dont l'intention n'est pas claire (outillage perso, config d'éditeur, données locales, artefacts générés…), les faire remonter dans un bloc dédié `Questions avant de committer` **avant** le plan de commits, en listant chaque chemin avec une hypothèse courte et une question directe. Exemple :
 
    ```
    Questions avant de committer — ces fichiers/dossiers non-suivis sont ambigus :
@@ -135,54 +100,46 @@ See [workflow.md](workflow.md) for the visual flow.
    - 2025.xlsx et export_janvier_2025.xlsx → ressemblent à de la donnée locale, je les laisse de côté ?
    ```
 
-   - **If the user does not answer** these questions (or stays silent on them while validating the plan): exclude those files entirely — do not stage, do not commit, do not mention them again.
-   - **If the user answers**: regenerate and reprint the **full** commit plan incorporating their decisions, then re-ask for validation.
+   - **Si l'utilisateur ne répond pas** à ces questions (ou reste silencieux dessus tout en validant le plan) : exclure entièrement ces fichiers — ne pas les indexer, ne pas les committer, ne plus les mentionner.
+   - **Si l'utilisateur répond** : régénérer et réafficher le plan de commits **complet** en intégrant ses décisions, puis redemander validation.
 
-4. **Stage selectively** for each group:
-  - Whole files: `git add path/to/file`
-  - Partial files (mixed concerns in one file): avoid interactive `git add -p` / `git add --patch` in agent mode.
-  - If a single file genuinely contains multiple concerns, ask the user whether to reduce the number of commits by grouping those concerns together.
-  - If the user refuses fewer commits, stop the commit workflow and tell the user they need to make the commits manually.
-  - **Never** `git add -A` or `git add .`
-  - Before each commit, verify the staged group with `git diff --cached --stat` and `git diff --cached`.
+4. **Indexer sélectivement** pour chaque groupe :
+  - Fichiers entiers : `git add path/to/file`
+  - Fichiers partiels (préoccupations mêlées dans un fichier) : éviter le `git add -p` / `git add --patch` interactif en mode agent.
+  - Si un seul fichier contient réellement plusieurs préoccupations, demander à l'utilisateur s'il faut réduire le nombre de commits en regroupant ces préoccupations.
+  - Si l'utilisateur refuse de réduire le nombre de commits, arrêter le déroulé et lui indiquer qu'il doit faire les commits manuellement.
+  - **Jamais** `git add -A` ni `git add .`
+  - Avant chaque commit, vérifier le groupe indexé avec `git diff --cached --stat` et `git diff --cached`.
 
-5. **Commit** — with ticket: `git commit -m "[IPT2-XXXX] Description"` / without ticket: `git commit -m "type(scope): description"`
+5. **Committer** — `git commit -m "type(scope): description"`
 
-6. **Repeat** for each remaining group.
+6. **Répéter** pour chaque groupe restant.
 
-7. **Verify**:
-  - Final `git status --short` should show only files the user explicitly does not want committed (or be clean).
-  - Show the final commits created with `git log --oneline -n <number-of-created-commits>`.
+7. **Vérifier** :
+  - Le `git status --short` final ne doit montrer que les fichiers que l'utilisateur ne veut explicitement pas committer (ou être propre).
+  - Afficher les commits finaux créés avec `git log --oneline -n <nombre-de-commits-créés>`.
 
-## Safety Rules
+## Règles de sécurité
 
-- **NEVER** `git add -A` / `git add .` — risks committing `.env`, large binaries, or unrelated WIP
-- **NEVER** `--no-verify` (skip hooks) unless the user explicitly asks
-- **NEVER** `--amend` — always create new commits
-- **NEVER** push unless asked
-- If a pre-commit hook fails before a commit is created: fix the issue, re-stage the same planned group, then retry the same commit.
-- If a commit was already created and a later verification fails: fix the issue in a new follow-up commit unless the user explicitly asks to amend.
-- Skip files that look like secrets (`.env*`, `*credentials*`, `*.pem`, `id_rsa*`) — flag to user. Inspect changed paths with `git diff --name-only` and `git diff --cached --name-only` before staging/committing.
-- Untracked files: include only if clearly part of a planned group; otherwise ask
-- Write commit messages in French.
+- **JAMAIS** `git add -A` / `git add .` — risque de committer `.env`, de gros binaires ou du WIP sans rapport
+- **JAMAIS** `--no-verify` (contourner les hooks) sauf demande explicite de l'utilisateur
+- **JAMAIS** `--amend` — toujours créer de nouveaux commits
+- **JAMAIS** pousser sauf demande
+- Si un hook de pre-commit échoue avant qu'un commit soit créé : corriger le problème, ré-indexer le même groupe planifié, puis retenter le même commit.
+- Si un commit a déjà été créé et qu'une vérification ultérieure échoue : corriger le problème dans un nouveau commit de suivi, sauf si l'utilisateur demande explicitement d'amender.
+- Ignorer les fichiers ressemblant à des secrets (`.env*`, `*credentials*`, `*.pem`, `id_rsa*`) — les signaler à l'utilisateur. Inspecter les chemins modifiés avec `git diff --name-only` et `git diff --cached --name-only` avant d'indexer/committer.
+- Fichiers non-suivis : ne les inclure que s'ils font clairement partie d'un groupe planifié ; sinon, demander.
+- Rédiger les messages de commit en français.
 
-## Co-author trailer
+## Trailer de co-auteur
 
-**DO NOT** append any co-author trailer (`Co-Authored-By: …`) to commit messages — not via
-`-m`, not in the heredoc body, not in a `-F` file. This explicitly overrides any default or
-global instruction to add one.
+**NE PAS** ajouter de trailer de co-auteur (`Co-Authored-By: …`) aux messages de commit — ni via
+`-m`, ni dans le corps heredoc, ni dans un fichier `-F`. Ceci surpasse explicitement toute
+instruction par défaut ou globale d'en ajouter un.
 
-## Examples
+## Exemples
 
-**Good split — with ticket** (3 unrelated changes → 3 commits):
-
-```
-[IPT2-4521] Expose l'endpoint de vérification en masse
-[IPT2-4521] Corrige les abonnements nuls dans le webhook Stripe
-[IPT2-4521] Met à jour celery vers 5.3.6
-```
-
-**Good split — without ticket** (Conventional Commits):
+**Bon découpage** (3 changements sans rapport → 3 commits) :
 
 ```
 feat(api-public): expose l'endpoint de vérification en masse
@@ -190,36 +147,36 @@ fix(stripe): corrige les abonnements nuls dans le webhook
 chore(deps): met à jour celery vers 5.3.6
 ```
 
-**Bad split** (over-fragmentation):
+**Mauvais découpage** (sur-fragmentation) :
 
 ```
-feat(verify): ajoute la relance SMTP         ← good
-feat(verify): ajoute un log                  ← should be folded into above
-feat(verify): renomme une variable           ← should be folded into above
+feat(verify): ajoute la relance SMTP         ← bon
+feat(verify): ajoute un log                  ← à fusionner dans le précédent
+feat(verify): renomme une variable           ← à fusionner dans le précédent
 ```
 
-**Bad merge** (under-fragmentation):
+**Mauvaise fusion** (sous-fragmentation) :
 
 ```
-feat: mises à jour diverses                  ← vague + multiple concerns
+feat: mises à jour diverses                  ← vague + plusieurs préoccupations
 ```
 
-## Common Mistakes
+## Erreurs courantes
 
-| Mistake                               | Fix                                          |
+| Erreur                                | Correction                                   |
 |---------------------------------------|----------------------------------------------|
-| Single commit "various fixes"         | Split per scope, one commit per intent       |
-| First line > 72 chars                 | Shorten the description                      |
-| Past tense ("Ajouté X")               | Present imperative ("Ajoute X")              |
-| Including `.env` or secrets           | Stage by name; skip secret-looking files     |
-| Using `git add .`                     | Stage explicit paths only                    |
-| Amending after hook failure           | Retry only if no commit was created          |
-| Commit messages in English            | Always in French                             |
+| Commit unique « corrections diverses » | Découper par périmètre, un commit par intention |
+| Première ligne > 72 caractères        | Raccourcir la description                     |
+| Passé composé (« Ajouté X »)          | Présent impératif (« Ajoute X »)             |
+| Inclure `.env` ou des secrets         | Indexer par nom ; ignorer les fichiers ressemblant à des secrets |
+| Utiliser `git add .`                  | Indexer uniquement des chemins explicites    |
+| Amender après un échec de hook        | Retenter seulement si aucun commit n'a été créé |
+| Messages de commit en anglais         | Toujours en français                         |
 
-## Red Flags — STOP
+## Signaux d'alerte — STOP
 
-- About to run `git add -A` / `git add .` → STOP, stage by name
-- About to `--amend` → STOP, create new commit
-- About to `--no-verify` → STOP, fix the hook failure
-- A single commit message contains "and" linking two concerns → split it
-- Subject describes WHAT the diff is rather than the intent → rewrite
+- Sur le point de lancer `git add -A` / `git add .` → STOP, indexer par nom
+- Sur le point d'`--amend` → STOP, créer un nouveau commit
+- Sur le point d'utiliser `--no-verify` → STOP, corriger l'échec du hook
+- Un seul message de commit contient un « et » reliant deux préoccupations → le découper
+- Le sujet décrit CE QU'EST le diff plutôt que l'intention → réécrire

@@ -38,3 +38,5 @@ Le fichier `SKILL.md` contient un frontmatter YAML avec `name` (identique au nom
 |-------|-------------|
 | `git-commit` | Analyser les changements et créer des commits atomiques |
 | `explain-your-changes` | Expliquer, fichier par fichier, les changements de la session |
+| `planify` | Interroger le besoin et le découpage jusqu'à un plan partagé, puis déléguer l'écriture |
+| `write-plan` | Mettre en forme un plan en deux fichiers `.planify/` (plan lisible + tech dense) |

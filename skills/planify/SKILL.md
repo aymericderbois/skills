@@ -1,6 +1,6 @@
 ---
 name: planify
-description: "Mène un interrogatoire serré sur le besoin et sur le découpage technique d'une fonctionnalité jusqu'à un plan partagé, puis confie l'écriture à write-plan. Une question à la fois, avec une réponse recommandée. Utiliser quand l'utilisateur veut planifier une fonctionnalité, découper un besoin en tâches faciles à relire, mettre un plan à l'épreuve avant de coder, préparer une session de mode plan, ou invoque /planify. Usage : /planify [demande]"
+description: "Mène un interrogatoire serré sur le besoin et sur le découpage technique d'une fonctionnalité jusqu'à un plan partagé, puis confie l'écriture à planify-write-plan. Une question à la fois, avec une réponse recommandée. Utiliser quand l'utilisateur veut planifier une fonctionnalité, découper un besoin en tâches faciles à relire, mettre un plan à l'épreuve avant de coder, préparer une session de mode plan, ou invoque /planify. Usage : /planify [demande]"
 argument-hint: "[demande en langage naturel]"
 allowed-tools: Read, Glob, Grep, Agent, AskUserQuestion, WebSearch, WebFetch, Skill
 effort: high
@@ -9,8 +9,8 @@ effort: high
 # Interrogatoire de planification
 
 Tu questionnes l'utilisateur, sur le besoin comme sur le découpage technique, jusqu'à ce que l'idée ou la demande
-initiale soit bien cartographiée en un plan. Tu confies l'écriture des fichiers au skill `write-plan`. C'est toi qui
-réfléchis et `write-plan` se contente de mettre en forme.
+initiale soit bien cartographiée en un plan. Tu confies l'écriture des fichiers au skill `planify-write-plan`. C'est toi qui
+réfléchis et `planify-write-plan` se contente de mettre en forme.
 
 Un plan peut couvrir **plusieurs fonctionnalités**. Le livrable visé : une liste de tâches :
 - faciles à relire et à comprendre
@@ -73,7 +73,7 @@ Cette phase est terminé quand plus aucune décision structurante n'est en suspe
 ## Phase 3 — Récapitulatif et validation
 
 <HARD-GATE>
-Aucun fichier n'est écrit et `write-plan` n'est pas invoqué tant que l'utilisateur n'a pas validé le récapitulatif.
+Aucun fichier n'est écrit et `planify-write-plan` n'est pas invoqué tant que l'utilisateur n'a pas validé le récapitulatif.
 </HARD-GATE>
 
 Court récapitulatif : la ou les fonctionnalités, les **titres des tâches** dans l'ordre, les décisions clés.
@@ -81,7 +81,7 @@ Court récapitulatif : la ou les fonctionnalités, les **titres des tâches** da
 
 ## Phase 4 — Passage de relais
 
-Assembler un **récapitulatif structuré** dans la conversation, puis **invoquer le skill `write-plan`** (il le mettra
+Assembler un **récapitulatif structuré** dans la conversation, puis **invoquer le skill `planify-write-plan`** (il le mettra
 en forme dans `.planify/<prefix>.plan.md` et `.tech.md`). Le récapitulatif contient :
 
 - **Contexte** — le pourquoi, couvrant la ou les fonctionnalités ; ce qui est hors périmètre le cas échéant.

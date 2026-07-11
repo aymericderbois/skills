@@ -1,6 +1,7 @@
 ---
-name: write-plan
-description: "Rédacteur du skill planify : met en forme le récapitulatif d'un plan (produit par l'interrogatoire /planify) en deux fichiers dans .planify/ — un plan.md lisible (tâches + contraintes d'acceptation) et un tech.md dense. Invoqué automatiquement par planify en fin de session ; peut être relancé pour réécrire les fichiers à partir d'un récapitulatif existant. Ne repose aucune question, ne prend aucune décision."
+name: planify-write-plan
+description: "Rédacteur interne du skill planify : met en forme le récapitulatif d'un plan (produit par l'interrogatoire de planify) en deux fichiers dans .planify/ — un plan.md lisible (tâches + contraintes d'acceptation) et un tech.md dense. Invoqué par planify via l'outil Skill ; ne se déclenche pas seul et n'a pas de slash command. Ne repose aucune question, ne prend aucune décision."
+user-invocable: false
 allowed-tools: Read, Write, Edit, Glob
 ---
 

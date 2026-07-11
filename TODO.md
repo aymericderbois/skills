@@ -1,7 +1,7 @@
 # SKILLs
 
 # SKILL
-## Planify
+## [DONE] Planify
 
 Il faut revoir ce SKILL pour le simplifier.
 Dans l'idée, il faut un seul SKILL qui permet d'aller de bout en bout dans le cycle de développement.

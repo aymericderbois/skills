@@ -6,7 +6,6 @@ description: >
 disable-model-invocation: true
 argument-hint: "[intentions, contraintes, ou fichiers à inclure/exclure]"
 allowed-tools: Bash(git status *) Bash(git diff *) Bash(git log *) Bash(git add *) Bash(git commit *)
-model-invocation: false
 ---
 
 # git-commit

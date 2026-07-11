@@ -11,13 +11,19 @@
       "source": "aymericderbois/skills",
       "sourceType": "github",
       "skillPath": "skills/git-commit/SKILL.md",
-      "computedHash": "9a4dad6d3a9eae62a2ab3b325012f01976cc5d208e96d9c82b7d177de0aefd07"
+      "computedHash": "9ad2cae687cb46fea2b46f0c9c254d674a673d6a74e80806914fa27c1273e8a3"
     },
     "planify": {
       "source": "aymericderbois/skills",
       "sourceType": "github",
       "skillPath": "skills/planify/SKILL.md",
-      "computedHash": "26b57146c170ce3611781cfa343fbf85acc8d40bf1cbcf3647067c34b61e8784"
+      "computedHash": "1920149cc3c2ed69cf88cf832a696174b838eaf2b193e25e10976f81f8757d29"
+    },
+    "planify-write-plan": {
+      "source": "aymericderbois/skills",
+      "sourceType": "github",
+      "skillPath": "skills/planify-write-plan/SKILL.md",
+      "computedHash": "830c54024ce77c036b0927b04a9c77cecf189eaad36ea06638c1eaafa8815176"
     },
     "write-plan": {
       "source": "aymericderbois/skills",

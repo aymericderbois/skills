@@ -3,3 +3,8 @@ node_modules/
 *.swp
 *.swo
 *~
+
+# Miroirs générés par le CLI « skills » (régénérés à l'install) — seul skills/ est source de vérité.
+# skills-lock.json, lui, est versionné (lockfile, comme package-lock.json).
+.agents/
+.claude/

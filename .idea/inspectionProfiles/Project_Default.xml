@@ -1,0 +1,64 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="JSHint" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <list>
+          <option value="django-push-notifications" />
+          <option value="azure-core" />
+          <option value="black" />
+          <option value="boto3" />
+          <option value="botocore" />
+          <option value="chardet" />
+          <option value="charset-normalizer" />
+          <option value="clamav-client" />
+          <option value="dateparser" />
+          <option value="django-cms" />
+          <option value="django-debug-toolbar" />
+          <option value="django-modeltranslation" />
+          <option value="djangorestframework" />
+          <option value="factur-x" />
+          <option value="faker" />
+          <option value="google-api-core" />
+          <option value="google-api-python-client" />
+          <option value="google-auth" />
+          <option value="google-auth-httplib2" />
+          <option value="google-cloud-speech" />
+          <option value="google-cloud-vision" />
+          <option value="googleapis-common-protos" />
+          <option value="lxml" />
+          <option value="matplotlib" />
+          <option value="model-bakery" />
+          <option value="more-itertools" />
+          <option value="nh3" />
+          <option value="paramiko" />
+          <option value="pdfminer-six" />
+          <option value="phonenumbers" />
+          <option value="pillow" />
+          <option value="pymupdf" />
+          <option value="pypdf2" />
+          <option value="pytest" />
+          <option value="pytz" />
+          <option value="redis" />
+          <option value="requests" />
+          <option value="rq" />
+          <option value="sentry-sdk" />
+          <option value="simplejson" />
+          <option value="twilio" />
+          <option value="urllib3" />
+          <option value="uv" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyStubPackagesAdvertiser" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <list>
+          <option value="djangorestframework" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="TsLint" enabled="true" level="WARNING" enabled_by_default="true" />
+  </profile>
+</component>

@@ -1,8 +1,15 @@
+# idea
+.idea/
+.planify/
+
 .DS_Store
 node_modules/
 *.swp
 *.swo
 *~
+
+# Rapports HTML générés par le skill « report-render » — sortie, non versionnée.
+.reports/
 
 # Miroirs générés par le CLI « skills » (régénérés à l'install) — seul skills/ est source de vérité.
 # skills-lock.json, lui, est versionné (lockfile, comme package-lock.json).

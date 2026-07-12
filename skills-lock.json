@@ -5,7 +5,7 @@
       "source": "aymericderbois/skills",
       "sourceType": "github",
       "skillPath": "skills/explain-your-changes/SKILL.md",
-      "computedHash": "9c60374312d1cf7dd83a09a1130d5f2b38f9717475558da119e333c3b1fad85b"
+      "computedHash": "0dc2ec88f51bc01f50dc9be82547e570b9a7ccd434368df9513fbcb574af5886"
     },
     "git-commit": {
       "source": "aymericderbois/skills",
@@ -17,13 +17,19 @@
       "source": "aymericderbois/skills",
       "sourceType": "github",
       "skillPath": "skills/planify/SKILL.md",
-      "computedHash": "1920149cc3c2ed69cf88cf832a696174b838eaf2b193e25e10976f81f8757d29"
+      "computedHash": "f08d23a7dc5a99ff30de3fd9f728c55f39134785b9d3de166f20383b5205c2c5"
     },
     "planify-write-plan": {
       "source": "aymericderbois/skills",
       "sourceType": "github",
       "skillPath": "skills/planify-write-plan/SKILL.md",
       "computedHash": "830c54024ce77c036b0927b04a9c77cecf189eaad36ea06638c1eaafa8815176"
+    },
+    "report-render": {
+      "source": "aymericderbois/skills",
+      "sourceType": "github",
+      "skillPath": "skills/report-render/SKILL.md",
+      "computedHash": "aada6706204622f79bf38b65f4d8d4c0eb284cb6ecb5eb921be4fe3268ef0d1a"
     },
     "write-plan": {
       "source": "aymericderbois/skills",

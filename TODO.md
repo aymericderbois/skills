@@ -113,12 +113,15 @@ assignation inoffensive côté numérotation.
 
 ```
 
-## artifact-design
+## [DONE] artifact-design
 
 Matt Pocock a un SKILL qui s'appel `artifact-design` qui permet de générer des rapports au format HTML disponible en tant qu'artefact sur
 claude code.
 
 Je trouve ça pas mal, à voir comment on pourrait en faire un similaire et l'utiliser dans nos propres SKILLs.
+
+Réalisé sous le nom **`report-render`** (rapport HTML autonome sur disque, Tailwind + Mermaid via CDN, pur
+formateur). Appelable à la demande et réutilisé par `planify` et `explain-your-changes`.
 
 
 # TODO Dev rules

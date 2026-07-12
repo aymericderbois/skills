@@ -21,7 +21,7 @@ ni `pyproject.toml`). Le « code » est constitué des fichiers `SKILL.md`.
 - `skills-lock.json` — lockfile généré (source, `skillPath`, hash de chaque skill).
 
 Ce dépôt a donc ses propres skills installés sur lui-même : lors d'une session ici, `git-commit`, `planify`,
-`planify-write-plan` et `explain-your-changes` sont disponibles comme skills.
+`planify-write-plan`, `explain-your-changes` et `report-render` sont disponibles comme skills.
 
 Après avoir modifié un `SKILL.md`, le miroir `.agents/` et les hashes de `skills-lock.json` deviennent obsolètes.
 **Il ne faut pas les mettre à jour**, c'est le développeur de le faire.
@@ -56,6 +56,14 @@ Relation à connaître avant de toucher à l'un des deux :
   `.planify/<prefix>.tech.md` (index technique dense). `<prefix>` = slug court dérivé de la demande.
 
 L'implémentation se poursuit ensuite en **mode plan natif** sur le `.plan.md`.
+
+## Skill de rendu : report-render
+
+- **`report-render`** (`/report-render`) est un **pur formateur** (comme `planify-write-plan`) : il met en forme
+  un contenu déjà présent dans la conversation en un **rapport HTML autonome** écrit dans `.reports/<slug>.report.html`
+  (Tailwind + Mermaid via CDN). Il ne décide rien et ne génère jamais de rapport tout seul : on le déclenche **à la
+  demande** (« fais-moi un rapport HTML »). `planify` (rapport d'un plan) et `explain-your-changes` (rapport des
+  changements) s'appuient dessus. Le dossier `.reports/` est ignoré par git.
 
 ## Conventions transverses
 

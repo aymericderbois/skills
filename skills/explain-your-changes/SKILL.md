@@ -47,3 +47,6 @@ Charge la feuille de style de la ligne de métadonnées (auteur, date, temps de 
 
 Ajoute le temps de lecture à côté de la date de publication. La valeur vient de la méthode `reading_time` du modèle.
 </output-template>
+
+Si l'utilisateur demande **un rapport HTML des changements** (« fais-moi un rapport HTML »), le skill
+`report-render` met en forme cette explication (diffs + commentaires) dans `.reports/<slug>.report.html`.

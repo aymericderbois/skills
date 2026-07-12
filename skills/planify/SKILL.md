@@ -94,3 +94,6 @@ en forme dans `.planify/<prefix>.plan.md` et `.tech.md`). Le récapitulatif cont
 
 Une fois les fichiers écrits, indiquer à l'utilisateur qu'il peut enchaîner en **mode plan natif** sur
 `.planify/<prefix>.plan.md`.
+
+Signaler aussi qu'il peut demander **un rapport HTML du plan** (« fais-moi un rapport HTML ») : le skill
+`report-render` met alors en forme le récapitulatif dans `.reports/<prefix>.report.html`, lisible au navigateur.

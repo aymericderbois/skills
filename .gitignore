@@ -1,6 +1,12 @@
-# idea
 .idea/
 .planify/
+
+.agents/
+.claude/skills/explain-your-changes
+.claude/skills/git-commit
+.claude/skills/planify
+.claude/skills/planify-write-plan
+.claude/skills/report-render
 
 .DS_Store
 node_modules/
@@ -10,8 +16,3 @@ node_modules/
 
 # Rapports HTML générés par le skill « report-render » — sortie, non versionnée.
 .reports/
-
-# Miroirs générés par le CLI « skills » (régénérés à l'install) — seul skills/ est source de vérité.
-# skills-lock.json, lui, est versionné (lockfile, comme package-lock.json).
-.agents/
-.claude/

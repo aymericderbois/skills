@@ -40,3 +40,4 @@ Le fichier `SKILL.md` contient un frontmatter YAML avec `name` (identique au nom
 | `explain-your-changes` | Expliquer, fichier par fichier, les changements de la session |
 | `planify` | Interroger le besoin et le découpage jusqu'à un plan partagé, puis déléguer l'écriture |
 | `write-plan` | Mettre en forme un plan en deux fichiers `.planify/` (plan lisible + tech dense) |
+| `retro` | Analyser les frictions de la session en cours et proposer des capitalisations dans `rules/`, `skills/` ou `CLAUDE.md` |

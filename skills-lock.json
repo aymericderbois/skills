@@ -31,6 +31,12 @@
       "skillPath": "skills/report-render/SKILL.md",
       "computedHash": "aada6706204622f79bf38b65f4d8d4c0eb284cb6ecb5eb921be4fe3268ef0d1a"
     },
+    "skill-creator": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "skillPath": "skills/skill-creator/SKILL.md",
+      "computedHash": "5ea13a6d9f0d4bb694405d79acd00cadec0d21bb138c4dd10fcf3c500cb835c2"
+    },
     "write-plan": {
       "source": "aymericderbois/skills",
       "sourceType": "github",

@@ -81,8 +81,11 @@ Court récapitulatif : la ou les fonctionnalités, les **titres des tâches** da
 
 ## Phase 4 — Passage de relais
 
-Assembler un **récapitulatif structuré** dans la conversation, puis **invoquer le skill `planify-write-plan`** (il le mettra
-en forme dans `.planify/<prefix>.plan.md` et `.tech.md`). Le récapitulatif contient :
+Si le plan à moins de 4 tâches, demander à l'utilisateur s'il souhaite simplement afficher le plan pour ensuite
+passer au développement.
+
+Sinon, assembler un **récapitulatif structuré** dans la conversation, puis **invoquer le skill `planify-write-plan`**
+(il le mettra en forme dans `.planify/<prefix>.plan.md` et `.tech.md`). Le récapitulatif contient :
 
 - **Contexte** — le pourquoi, couvrant la ou les fonctionnalités ; ce qui est hors périmètre le cas échéant.
 - **Tâches** — dans l'ordre. Pour chacune : un titre, une description de ce qu'il faut faire (avec un peu de

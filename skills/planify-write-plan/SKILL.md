@@ -16,6 +16,7 @@ n'inventes aucune tâche ni contrainte absente du récapitulatif.
 - **Tu dois** faire des phrases courtes et concretes.
 - **Tu dois** utiliser des termes simples et précis.
 - **Tu dois** éviter les mots-valise et les expressions trop générales.
+- **Tu dois** faire des retours à la ligne pour que le fichier soit facile à lire.
 
 ## Résolution du préfixe
 

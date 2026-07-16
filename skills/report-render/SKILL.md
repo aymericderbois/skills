@@ -30,6 +30,8 @@ Un fichier unique : `.reports/<slug>.report.html`.
 2. Créer le dossier `.reports/` s'il n'existe pas.
 3. Écrire le HTML en suivant **[`references/html-report.md`](references/html-report.md)** : scaffold à copier,
    design system (palette, typo, layout, thème clair/sombre) et catalogue des blocs réutilisables.
+4. Chaque `<section>` porte une ancre `data-annote` (ID de tâche `T3` pour un plan, sinon un slug du titre) et la
+   **couche d'annotation** est collée avant `</body>` : elle est présente sur **chaque** rapport.
 
 ## Règles
 
@@ -37,7 +39,14 @@ Un fichier unique : `.reports/<slug>.report.html`.
 - Reprendre les **titres, l'ordre et les mots** du contenu source. Tu mets en forme, tu ne réécris pas le fond.
 - Le rapport est **autonome** : un seul fichier `.html`, aucune ressource locale annexe.
 
+## Retours
+
+Le rapport embarque une **couche d'annotation** : le lecteur sélectionne un passage, y attache un commentaire, puis
+clique sur « Copier les retours » pour récupérer un bloc Markdown. Ce bloc se **colle dans `planify`**, qui localise
+chaque passage cité et applique les retours. Détail du format et du composant : `references/html-report.md`.
+
 ## Fin
 
 Signaler le chemin écrit sous une forme cliquable (`.reports/<slug>.report.html`) et inviter l'utilisateur à
-l'ouvrir dans son navigateur.
+l'ouvrir dans son navigateur. Préciser qu'il peut **annoter le rapport** (sélection de texte) et **coller ses
+retours dans `planify`**.

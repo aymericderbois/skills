@@ -46,6 +46,22 @@ Résoudre le préfixe : un slug court dérivé de la demande (minuscules, tirets
 Si `.planify/<prefix>.plan.md` existe déjà : le lire comme contexte, **ne pas reposer les questions déjà tranchées**,
 ne questionner que les ajouts et les changements.
 
+### Retours collés (annotations d'un rapport)
+
+Si le message contient un **bloc de retours** produit par `report-render` — il commence par `# Retours — …` et
+enchaîne des entrées `## Retour N — <ancre>` (un passage cité en blockquote, puis une ligne `Commentaire :`) —
+traiter ces retours **au lieu** de lancer un interrogatoire complet :
+
+1. Résoudre le préfixe et charger le plan visé : `.planify/<prefix>.plan.md` s'il existe, sinon le plan courant de
+   la conversation.
+2. Pour chaque retour, **localiser le passage cité** dans le plan via l'ancre (`<ancre>` = ID de tâche `T3` ou titre
+   de section) puis le texte du blockquote.
+3. **Appliquer directement** les retours clairs. **Ne re-questionner que** les retours ambigus (une question à la
+   fois, réponse recommandée — mêmes règles que la Phase 2).
+4. Réécrire le plan en re-déléguant à `planify-write-plan` (Phase 4).
+5. **Clôture** : afficher dans la conversation un **récapitulatif concis** des changements — par retour, ce qui a
+   été **ajouté / modifié / retiré**. Court, à l'essentiel, **aucun fichier créé**.
+
 ## Phase 2 — Interrogatoire
 
 Interroger sans relâche jusqu'à une compréhension partagée et une bonne cartographie du besoin et de la demande.

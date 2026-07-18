@@ -5,7 +5,7 @@ description: >
   cassants avant d'appliquer la montée. À utiliser quand l'utilisateur veut monter une dépendance Python, corriger
   une CVE remontée par uv audit, rafraîchir le lockfile, ou invoque /python-upgrade-package.
 argument-hint: "[paquet(s) et version(s) cible, ex. « gunicorn 23 » ou « requests django »]"
-allowed-tools: Read, Grep, Glob, Edit, Bash(uv *), Bash(uvx *), Bash(git diff *), Bash(git grep *), Bash(git log *), WebSearch, WebFetch, AskUserQuestion
+allowed-tools: Read, Grep, Glob, Edit, Agent, Bash(uv *), Bash(uvx *), Bash(git diff *), Bash(git grep *), Bash(git log *), WebSearch, WebFetch, AskUserQuestion
 ---
 
 # python-upgrade-package
@@ -26,7 +26,7 @@ Copier cette checklist dans la réponse et la cocher au fil de l'eau :
 
 ```
 - [ ] 1. Cadrer     : lister les paquets, version courante → cible, pin exact vs plage
-- [ ] 2. Changelogs : lire les entrées entre courant et cible, extraire les changements cassants
+- [ ] 2. Changelogs : prévisualiser les co-montées, puis lire les entrées entre courant et cible, extraire les cassures
 - [ ] 3. Impact     : confronter chaque changement cassant à l'usage réel dans le code
 - [ ] 4. Décision   : impact → corriger dans la foulée ou s'arrêter ; sinon continuer
 - [ ] 5. Appliquer  : la montée via uv
@@ -38,6 +38,13 @@ Copier cette checklist dans la réponse et la cocher au fil de l'eau :
 
 Les étapes 2 à 4 se répètent **par paquet** ; l'étape 5 les applique ensemble.
 
+**Délégation.** Quand plusieurs paquets sont à analyser (demandés + co-montées sensibles relevées par le dry-run),
+lancer **dans un seul message** un subagent `Agent` (`subagent_type=general-purpose`) par paquet, chacun avec le
+prompt [references/analyse-paquet.md](references/analyse-paquet.md) rempli (paquet, versions, racine du projet,
+rôle). Chaque agent rend le tableau compact défini dans le prompt — jamais de copier-coller massif. Un seul paquet
+sans co-montée → faire les étapes 2–3 inline, sans subagent. Dans tous les cas, les étapes 4 et suivantes restent
+dans la conversation principale.
+
 ### 1. Cadrer
 
 Rassembler d'abord les informations qui serviront ensuite.
@@ -48,6 +55,16 @@ Rassembler d'abord les informations qui serviront ensuite.
 - **Forme de la contrainte** : pin exact (`pkg==X`) ou plage (`pkg>=X`, `>=X,<Y`) — ça change la mécanique (étape 5).
 
 ### 2. Changelogs
+
+**D'abord, lister les co-montées.** Une montée entraîne souvent d'autres paquets (bornes minimales relevées,
+dépendances partagées). Prévisualiser la résolution **avant** toute lecture de changelog :
+
+- pin exact : `uv add --dry-run 'pkg==Y'` (avec les extras s'il y en a) ;
+- plage : `uv lock --dry-run --upgrade-package pkg`.
+
+Relever **tous** les paquets qui bougeraient. Chaque co-montée d'un paquet sensible (serveur, worker, ORM, crypto,
+sérialisation, tout paquet importé par le code) suit les étapes 2 à 4 au même titre que les paquets demandés — pas
+seulement un contrôle après coup.
 
 Pour chaque paquet, lire **uniquement les entrées strictement entre la version courante (exclue) et la cible
 (incluse)**. Pour un saut de plusieurs majeures, cumuler les cassures de chaque palier.
@@ -82,14 +99,12 @@ présumer**.
   `uv add 'a==1' 'b==2'`.
 - **Plage `pkg>=X`** — monter dans la plage sans toucher la contrainte : `uv lock --upgrade-package pkg` puis
   `uv sync`. Pour dépasser la borne haute : éditer la contrainte (ou `uv add`) puis reverrouiller.
-- **Prévisualiser** avant d'appliquer : `uv lock --dry-run --upgrade-package pkg`.
 - **Ne pas** lancer `uv lock --upgrade` (sans `--package`) sauf demande explicite : il monte **tout** le graphe.
 
 ### 6. Vérifier le lock
 
-`git diff uv.lock` : confirmer que seuls le(s) paquet(s) visé(s) — et leurs dépendances légitimes — ont bougé.
-Repérer toute **montée transitive inattendue** et la traiter comme une montée à part entière (retour étape 2 si elle
-touche un paquet sensible).
+`git diff uv.lock` : confirmer que le diff correspond aux co-montées prévues à l'étape 2 — rien de plus. Tout paquet
+qui bouge sans avoir été prévu retourne à l'étape 2.
 
 ### 7. Tests + smoke-test
 

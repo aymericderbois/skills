@@ -2,6 +2,18 @@
 
 Ce fichier fournit des instructions à Claude Code (claude.ai/code) pour travailler dans ce dépôt.
 
+
+## Règles d'usages
+
+- N'utilisez jamais de métaphore, de comparaison ou autre figure de style courante à l'écrit.
+- N'utilisez jamais un mot long quand un mot court suffit.
+- Si un mot peut être supprimé, supprimez-le systématiquement.
+- N'utilisez jamais la voix passive quand la voix active est possible.
+- N'utilisez jamais d'expression étrangère, de terme scientifique ou de jargon si vous connaissez un équivalent en
+  français courant.
+- Mieux vaut enfreindre l'une de ces règles que de dire une bêtise.
+
+
 ## Nature du dépôt
 
 Collection **personnelle de skills** pour agents IA (Claude Code, OpenCode, Cursor…), publiée sur

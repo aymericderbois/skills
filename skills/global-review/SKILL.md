@@ -1,4 +1,5 @@
 ---
+name: global-review
 description: Lance des reviews parallèles (simplification, sécurité, code quality) sur le diff courant et génère un rapport consolidé avec diffs et explications.
 ---
 

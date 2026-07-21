@@ -6,7 +6,9 @@
 .claude/skills/git-commit
 .claude/skills/planify
 .claude/skills/planify-write-plan
+.claude/skills/python-typing
 .claude/skills/report-render
+.claude/skills/retro
 
 .DS_Store
 node_modules/

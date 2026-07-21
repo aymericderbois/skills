@@ -65,8 +65,8 @@ CDN** — on reste sur des polices système pour que le fichier s'affiche correc
       .badge.acc { color:var(--accent); border-color:color-mix(in srgb,var(--accent) 40%,var(--border)); }
       /* checklist */
       ul.check { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:.4rem; }
-      ul.check li { display:flex; gap:.6rem; align-items:baseline; }
-      ul.check li::before { content:"☐"; color:var(--muted); }
+      ul.check li { position:relative; padding-left:1.4rem; }
+      ul.check li::before { content:"☐"; position:absolute; left:0; color:var(--muted); }
       ul.check li.done::before { content:"☑"; color:var(--good); }
       /* mermaid : neutraliser le fond blanc de la lib */
       .mermaid { background:var(--surface); border:1px solid var(--border); border-radius:.5rem; padding:1rem; }

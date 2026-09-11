@@ -1,8 +1,8 @@
 ---
 name: planify
-description: "Mène un interrogatoire serré sur le besoin et sur le découpage technique d'une fonctionnalité jusqu'à un plan partagé, puis confie l'écriture à planify-write-plan. Une question à la fois, avec une réponse recommandée. Utiliser quand l'utilisateur veut planifier une fonctionnalité, découper un besoin en tâches faciles à relire, mettre un plan à l'épreuve avant de coder, préparer une session de mode plan, ou invoque /planify. Usage : /planify [demande]"
+description: "Mène un interrogatoire serré sur le besoin et sur le découpage technique d'une fonctionnalité jusqu'à un plan partagé, puis confie l'écriture à planify-write-plan. Des questions ouvertes groupées en lots indépendants, chacune avec une réponse recommandée. Utiliser quand l'utilisateur veut planifier une fonctionnalité, découper un besoin en tâches faciles à relire, mettre un plan à l'épreuve avant de coder, préparer une session de mode plan, ou invoque /planify. Usage : /planify [demande]"
 argument-hint: "[demande en langage naturel]"
-allowed-tools: Read, Glob, Grep, Agent, AskUserQuestion, WebSearch, WebFetch, Skill
+allowed-tools: Read, Glob, Grep, Agent, WebSearch, WebFetch, Skill
 effort: high
 ---
 
@@ -12,7 +12,9 @@ Tu questionnes l'utilisateur, sur le besoin comme sur le découpage technique, j
 initiale soit bien cartographiée en un plan. Tu confies l'écriture des fichiers au skill `planify-write-plan`. C'est toi qui
 réfléchis et `planify-write-plan` se contente de mettre en forme.
 
-Un plan peut couvrir **plusieurs fonctionnalités**. Le livrable visé : une liste de tâches :
+Un plan peut couvrir **plusieurs fonctionnalités**.
+
+Le livrable visé est une liste de tâches :
 - faciles à relire et à comprendre
 - facile à code-review une fois développée
 - corresponds globablement à la taille d'un commit
@@ -26,7 +28,7 @@ planifier avant d'explorer.
 
 Comprendre l'existant **avant** de poser la moindre question. Analyse les changements déjà en place dans la branche
 et dans l'espace de travail git.
-Cette phase est terminée quand tu sais : ce qui existe déjà, les technologies utilisées, les conventions du projet.
+Cette phase est terminée quand tu sais ce qui existe déjà, les technologies utilisées, les conventions du projet.
 
 1. Lire `CLAUDE.md` / `AGENTS.md` et les conventions du projet (par ex. `.claude/rules/`, guides de contribution,
    docs de style ou de tests).
@@ -56,8 +58,8 @@ traiter ces retours **au lieu** de lancer un interrogatoire complet :
    la conversation.
 2. Pour chaque retour, **localiser le passage cité** dans le plan via l'ancre (`<ancre>` = ID de tâche `T3` ou titre
    de section) puis le texte du blockquote.
-3. **Appliquer directement** les retours clairs. **Ne re-questionner que** les retours ambigus (une question à la
-   fois, réponse recommandée — mêmes règles que la Phase 2).
+3. **Appliquer directement** les retours clairs. **Ne re-questionner que** les retours ambigus (questions ouvertes
+   groupées en lots indépendants, réponse recommandée — mêmes règles que la Phase 2).
 4. Réécrire le plan en re-déléguant à `planify-write-plan` (Phase 4).
 5. **Clôture** : afficher dans la conversation un **récapitulatif concis** des changements — par retour, ce qui a
    été **ajouté / modifié / retiré**. Court, à l'essentiel, **aucun fichier créé**.
@@ -67,12 +69,15 @@ traiter ces retours **au lieu** de lancer un interrogatoire complet :
 Interroger sans relâche jusqu'à une compréhension partagée et une bonne cartographie du besoin et de la demande.
 Cette phase est terminé quand plus aucune décision structurante n'est en suspens.
 
-- **Une question à la fois**, en attendant la réponse avant de passer à la suivante. Enchaîner plusieurs questions
-  d'un coup est déroutant.
+- **Questions ouvertes**, jamais de choix fermés ni de menus (pas d'`AskUserQuestion`).
+- **Grouper en lots de questions indépendantes** : aucune question d'un lot ne doit dépendre de la réponse à une
+  autre du même lot. Ne pas tout déverser d'un coup — enchaîner **plusieurs lots**, en attendant les réponses d'un
+  lot avant de poser le suivant.
 - Chaque question s'accompagne de **ta réponse recommandée**, argumentée. La réponse recommandée doit être celle qui
   à le plus de sens (bonne façon de faire, bonnes pratiques, bon design pattern, ...) et non pas la plus simple ou la 
   plus rapide
-- Descendre l'**arbre de décision** : résoudre les dépendances une par une, du plus structurant vers le détail, parcourir
+- Descendre l'**arbre de décision** niveau par niveau, du plus structurant vers le détail : à chaque niveau, les
+  questions indépendantes forment un lot, les questions dépendantes attendent le lot suivant, jusqu'à parcourir
   toutes les ramifications en lien avec la demande.
 - **Chercher plutôt que demander** : si une question trouve sa réponse en lisant le code, lis le code. Soit pro-actif et cherche
   dans le code le plus souvent possible et ne pose la question que si tu ne trouve pas la réponse.
@@ -93,7 +98,7 @@ Aucun fichier n'est écrit et `planify-write-plan` n'est pas invoqué tant que l
 </HARD-GATE>
 
 Court récapitulatif : la ou les fonctionnalités, les **titres des tâches** dans l'ordre, les décisions clés.
-`AskUserQuestion` « OK / à ajuster ». Itérer si besoin.
+Demander en clair « OK ou à ajuster ? » (question ouverte). Itérer si besoin.
 
 ## Phase 4 — Passage de relais
 

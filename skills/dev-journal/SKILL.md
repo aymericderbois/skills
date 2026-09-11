@@ -8,8 +8,8 @@ allowed-tools: Read, Write, Edit, Glob, Bash(date *), Bash(git branch *), Bash(m
 ## Rôle
 
 Tenir, par ticket, un **journal de bord** que le développeur relit d'un coup avant la MR ou la QA, et qu'un agent
-qui reprend le ticket lit pour se remettre dans le contexte. Trois contenus : ce qui a été fait, les décisions
-prises, les points à savoir.
+qui reprend le ticket lit pour se remettre dans le contexte. Cinq contenus : ce qui a été fait, les décisions
+prises, le reste à faire de la tâche, les actions de mise en prod, les points à savoir.
 
 Le journal capte ce qui s'évapore : le **pourquoi** des choix, les revirements, et les actions à ne pas oublier
 (migration à lancer, commande à rejouer). Le git log porte le quoi, le journal porte le reste.
@@ -47,6 +47,10 @@ son `CLAUDE.md` (ex. « après chaque décision technique ou tâche terminée, i
 
 ## Décisions
 
+## Reste à faire
+
+## Mise en prod
+
 ## À savoir
 ```
 
@@ -60,8 +64,10 @@ en fin de session.
 | Une décision technique se prend | Décisions | Ajouter une puce horodatée **en fin de liste** (ordre chronologique) |
 | Une décision en remplace une autre | Décisions | Ajouter la nouvelle puce en fin de liste, **barrer** l'ancienne (`~~…~~`) avec le renvoi « remplacée : voir plus bas » |
 | Un point à savoir apparaît | À savoir | Ajouter la puce immédiatement |
+| Il reste du travail sur la tâche (développement, tests, QA, commit) | Reste à faire | Ajouter la case à cocher immédiatement |
+| Une action attend la mise en prod (migration longue, commande à rejouer, flag à activer) | Mise en prod | Ajouter la case à cocher immédiatement |
 | Une tâche se termine | Ce qui a été fait | Mettre à jour le résumé, tâche par tâche |
-| L'agent exécute une action cochable (commande lancée, migration passée) | À savoir | Cocher la case ; sinon elle reste au développeur |
+| L'agent exécute une action cochée dans Reste à faire ou Mise en prod | La section concernée | Cocher la case ; sinon elle reste au développeur |
 
 Une **tâche** est une unité de travail livrée : une tâche du plan `.planify/` si un plan existe, sinon un lot de
 changements de la taille d'un commit.
@@ -84,12 +90,21 @@ Une puce par décision : `- <date heure> — <choix> — <pourquoi en quelques m
 - 2026-09-11 15:47 — Parsing des adresses via libpostal — les regex maison cassaient sur les adresses étrangères
 ```
 
+### Reste à faire
+
+Le travail restant **sur la tâche** (développement, tests, QA, commit). Une case à cocher par action :
+`- [ ] QA du formulaire tiers — modale de création depuis une facture étrangère`
+
+### Mise en prod
+
+Les actions qui attendent le **déploiement**, une fois la tâche terminée. Une case à cocher par action,
+commande exacte en inline code, prête à copier :
+`- [ ] Lancer la migration 0042 — ~5 min sur la prod, table providers`
+
 ### À savoir
 
-- **Actionnable** → case à cocher, commande exacte en inline code, prête à copier :
-  `- [ ] Lancer la migration 0042 — ~5 min sur la prod, table providers`
-- **Informatif** → puce simple :
-  `- L'export garde l'ancien format tant que le feature flag est off`
+Informatif uniquement, puce simple — une action à mener va dans Reste à faire ou Mise en prod :
+`- L'export garde l'ancien format tant que le feature flag est off`
 
 ### Ce qui a été fait
 

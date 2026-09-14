@@ -44,8 +44,13 @@ Ne pas afficher cette synthèse brute — elle sert à poser des questions perti
 
 ### Reprise
 
+Utiliser `.task/<KEY>/` pour le ticket : son numéro Jira ou, sans Jira, un nom court issu du besoin.
+Réutiliser le dossier désigné dans la session et lire `ticket.md` s'il existe. Si plusieurs tickets
+conviennent, demander lequel utiliser.
+
 Résoudre le préfixe : un slug court dérivé de la demande (minuscules, tirets, 2 à 5 mots signifiants).
-Si `.planify/<prefix>.plan.md` existe déjà : le lire comme contexte, **ne pas reposer les questions déjà tranchées**,
+Il nomme le sous-dossier de la tâche : `.task/<KEY>/<prefix>/`. Réutiliser le dossier existant en reprise.
+Si `.task/<KEY>/<prefix>/plan.md` existe déjà : le lire comme contexte, **ne pas reposer les questions déjà tranchées**,
 ne questionner que les ajouts et les changements.
 
 ### Retours collés (annotations d'un rapport)
@@ -54,8 +59,8 @@ Si le message contient un **bloc de retours** produit par `report-render` — il
 enchaîne des entrées `## Retour N — <ancre>` (un passage cité en blockquote, puis une ligne `Commentaire :`) —
 traiter ces retours **au lieu** de lancer un interrogatoire complet :
 
-1. Résoudre le préfixe et charger le plan visé : `.planify/<prefix>.plan.md` s'il existe, sinon le plan courant de
-   la conversation.
+1. Résoudre le dossier du ticket et le préfixe, puis charger le plan visé : `.task/<KEY>/<prefix>/plan.md`
+   s'il existe, sinon le plan courant de la conversation.
 2. Pour chaque retour, **localiser le passage cité** dans le plan via l'ancre (`<ancre>` = ID de tâche `T3` ou titre
    de section) puis le texte du blockquote.
 3. **Appliquer directement** les retours clairs. **Ne re-questionner que** les retours ambigus (questions ouvertes
@@ -106,8 +111,9 @@ Si le plan à moins de 4 tâches, demander à l'utilisateur s'il souhaite simple
 passer au développement.
 
 Sinon, assembler un **récapitulatif structuré** dans la conversation, puis **invoquer le skill `planify-write-plan`**
-(il le mettra en forme dans `.planify/<prefix>.plan.md` et `.tech.md`). Le récapitulatif contient :
+(il le mettra en forme dans `.task/<KEY>/<prefix>/plan.md` et `tech.md`). Le récapitulatif contient :
 
+- **Dossier** — le chemin exact `.task/<KEY>/<prefix>/` choisi pour cette tâche.
 - **Contexte** — le pourquoi, couvrant la ou les fonctionnalités ; ce qui est hors périmètre le cas échéant.
 - **Tâches** — dans l'ordre. Pour chacune : un titre, une description de ce qu'il faut faire (avec un peu de
   technique et un extrait de code si cela aide à se représenter le travail), et des **contraintes d'acceptation**
@@ -117,7 +123,7 @@ Sinon, assembler un **récapitulatif structuré** dans la conversation, puis **i
   permissions, drapeaux de fonctionnalité, données de test).
 
 Une fois les fichiers écrits, indiquer à l'utilisateur qu'il peut enchaîner en **mode plan natif** sur
-`.planify/<prefix>.plan.md`.
+`.task/<KEY>/<prefix>/plan.md`.
 
 Signaler aussi qu'il peut demander **un rapport HTML du plan** (« fais-moi un rapport HTML ») : le skill
 `report-render` met alors en forme le récapitulatif dans `.reports/<prefix>.report.html`, lisible au navigateur.
